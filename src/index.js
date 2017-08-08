@@ -16,6 +16,8 @@ import YTSearch from 'youtube-api-search';
 // you have to refer to the specific path it is located. It's not
 // necessary with libraries inside the node_modules folder
 import SearchBar from './components/search_bar';
+import VideoList from './components/video_list';
+import VideoDetail from './components/video_detail';
 
 // API Key to access youtube
 // const is ES6 component, const doesn't change ever, if you try to change it's value, it returns an error
@@ -33,16 +35,21 @@ class App extends Component {
 
         this.state = { videos: [] };
 
-        YTSearch({key:API_KEY, term: 'surfboards'}, (videos) => {
+        YTSearch({key:API_KEY, term: 'shiba'}, (videos) => {
             // when using ES6, if the key and the property have the same name,
             // instead of updating the state like this.setState({ videos: videos }), we can do as below:
             this.setState({ videos });
         });
     }
+
     render() {
+        // to pass data from the parent component (in this case, App) to a child component (VideoList),
+        // just define a property in the JSX tag, passing prop videos={this.state.videos}
         return (
             <div>
                 <SearchBar />
+                <VideoDetail video={this.state.videos[0]} />
+                <VideoList videos={this.state.videos} />
             </div>
         );
     }
