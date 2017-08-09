@@ -28,16 +28,21 @@ class SearchBar extends Component {
     //    console.log(event.target.value);
     // }
     render() {
-        // to change a state, use this.setState({ property: 'value' })
         return (
-            // this input below is a controlled component, because its value is set by state,
+            // the input below is a controlled component, because its value is set by state,
             // and not the other way around
             <div className="search-bar">
                 <input
                     value={this.state.term}
-                    onChange={event => this.setState({ term: event.target.value })} />
+                    onChange={event => this.onInputChange(event.target.value)} />
             </div>
         );
+    }
+
+    onInputChange(term) {
+        // to change a state, use this.setState({ property: 'value' })
+        this.setState({ term });
+        this.props.onSearchTermChange(term);
     }
 
 }

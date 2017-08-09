@@ -1,3 +1,5 @@
+// lodash is a package that allows us to render functions every other period of time
+import _ from 'lodash';
 // before everything, you have to import react,
 // which is assigned to the variable React.
 // Is is a concept of React that only the most parent component of an application should fetch outside data.
@@ -27,8 +29,6 @@ const API_KEY = 'AIzaSyAmsx6VhvMNDGMBvqgVRIFsNOzbs4HQaLk';
 // Instead of declaring the function with the keyword 'function'
 // use the fat arrow (=>), an ESX pattern
 
-// this is a functional based component, that is used when we're just taking in some information and outputting
-// some JSX inside the DOM (JSX are all these HTML elements in the middle of js that render in the browser)
 class App extends Component {
     constructor(props) {
         super(props);
@@ -39,11 +39,10 @@ class App extends Component {
         };
 
         this.videoSearch('shiba');
-
     }
 
     videoSearch(term) {
-        YTSearch({key:API_KEY, term: term}, (videos) => {
+        YTSearch({key: API_KEY, term: term}, (videos) => {
             // when using ES6, if the key and the property have the same name,
             // instead of updating the state like this.setState({ videos: videos }), we can do as below:
             // this.setState({ videos });
@@ -55,11 +54,13 @@ class App extends Component {
     }
 
     render() {
+        // sets a delay to search
+        const videoSearch = _.debounce((term) => { this.videoSearch(term) }, 300);
         // to pass data from the parent component (in this case, App) to a child component (VideoList),
         // just define a property in the JSX tag, passing prop videos={this.state.videos}
         return (
             <div>
-                <SearchBar onSearchTermChange={term => this.videoSearch(term)} />
+                <SearchBar onSearchTermChange={videoSearch} />
                 <VideoDetail video={this.state.selectedVideo} />
                 <VideoList
                     onVideoSelect={selectedVideo => this.setState({selectedVideo})}
