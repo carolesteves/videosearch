@@ -33,12 +33,24 @@ class App extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { videos: [] };
+        this.state = {
+            videos: [],
+            selectedVideo: null
+        };
 
-        YTSearch({key:API_KEY, term: 'shiba'}, (videos) => {
+        this.videoSearch('shiba');
+
+    }
+
+    videoSearch(term) {
+        YTSearch({key:API_KEY, term: term}, (videos) => {
             // when using ES6, if the key and the property have the same name,
             // instead of updating the state like this.setState({ videos: videos }), we can do as below:
-            this.setState({ videos });
+            // this.setState({ videos });
+            this.setState({
+                videos: videos,
+                selectedVideo: videos[0]
+            });
         });
     }
 
@@ -47,9 +59,11 @@ class App extends Component {
         // just define a property in the JSX tag, passing prop videos={this.state.videos}
         return (
             <div>
-                <SearchBar />
-                <VideoDetail video={this.state.videos[0]} />
-                <VideoList videos={this.state.videos} />
+                <SearchBar onSearchTermChange={term => this.videoSearch(term)} />
+                <VideoDetail video={this.state.selectedVideo} />
+                <VideoList
+                    onVideoSelect={selectedVideo => this.setState({selectedVideo})}
+                    videos={this.state.videos} />
             </div>
         );
     }
